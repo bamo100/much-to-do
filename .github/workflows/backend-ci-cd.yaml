@@ -76,6 +76,7 @@ jobs:
           echo "Region is set: ${{ vars.AWS_REGION != '' }}"
           echo "Role ARN is set: ${{ vars.AWS_DEPLOY_ROLE_ARN != '' }}"  
           echo "ECR REPO is set: ${{ env.ECR_REPOSITORY }}"
+          echo "ASG NAME is set: ${{ vars.ASG_NAME != '' }}"
 
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v4
