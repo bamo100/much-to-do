@@ -12,8 +12,8 @@ on:
       - 'backend/MuchToDo/**'
 
 env:
-  AWS_REGION: ${{ secrets.AWS_REGION }}
-  ECR_REPOSITORY: ${{ secrets.ECR_REPOSITORY }}
+  AWS_REGION: ${{ vars.AWS_REGION }}
+  ECR_REPOSITORY: ${{ vars.ECR_REPOSITORY }}
 
 jobs:
   test:
@@ -74,13 +74,13 @@ jobs:
       - name: Debug secrets
         run: |
           echo "Region is set: ${{ vars.AWS_REGION != '' }}"
-          echo "Role ARN is set: ${{ secrets.AWS_DEPLOY_ROLE_ARN != '' }}"  
+          echo "Role ARN is set: ${{ vars.AWS_DEPLOY_ROLE_ARN != '' }}"  
           echo "ECR REPO is set: ${{ env.ECR_REPOSITORY }}""
 
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v4
         with:
-          role-to-assume: ${{ secrets.AWS_DEPLOY_ROLE_ARN }}
+          role-to-assume: ${{ vars.AWS_DEPLOY_ROLE_ARN }}
           aws-region: ${{ vars.AWS_REGION }}
 
       - name: Login to ECR
@@ -127,13 +127,13 @@ jobs:
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v4
         with:
-          role-to-assume: ${{ secrets.AWS_DEPLOY_ROLE_ARN }}
+          role-to-assume: ${{ vars.AWS_DEPLOY_ROLE_ARN }}
           aws-region: ${{ vars.AWS_REGION }}
 
       - name: Start instance refresh
         run: |
           aws autoscaling start-instance-refresh \
-            --auto-scaling-group-name ${{ secrets.ASG_NAME }} \
+            --auto-scaling-group-name ${{ vars.ASG_NAME }} \
             --preferences '{"MinHealthyPercentage": 50, "InstanceWarmup": 120}'
 
       - name: Wait for instance refresh
@@ -141,7 +141,7 @@ jobs:
           echo "Waiting for instance refresh to complete..."
           while true; do
             STATUS=$(aws autoscaling describe-instance-refreshes \
-              --auto-scaling-group-name ${{ secrets.ASG_NAME }} \
+              --auto-scaling-group-name ${{ vars.ASG_NAME }} \
               --query 'InstanceRefreshes[0].Status' \
               --output text)
 
