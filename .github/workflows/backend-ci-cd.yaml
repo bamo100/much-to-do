@@ -71,6 +71,12 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
+      - name: Debug secrets
+        run: |
+          echo "Region is set: ${{ vars.AWS_REGION != '' }}"
+          echo "Role ARN is set: ${{ secrets.AWS_DEPLOY_ROLE_ARN != '' }}"  
+          echo "ECR REPO is set: ${{ env.ECR_REPOSITORY }}""
+
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v4
         with:
