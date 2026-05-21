@@ -95,4 +95,5 @@ jobs:
 
       - name: Notify failure
         if: failure()
-        run: echo "Frontend deployment failed! Check logs: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+        run: |
+          echo "Frontend deployment failed! Check logs: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
